@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🌜SURAKA🌛</title>
+    <title>🌜SURAKA🌛 團務查詢</title>
     <style>
         :root {
             --brand-yellow: #FFD500;
@@ -81,7 +81,7 @@
 
 <div class="container">
     <div class="header">
-        <h2> 團務查詢系統</h2>
+        <h2>團務查詢系統</h2>
         <p>🌜SURAKA🌛</p>
     </div>
 
@@ -100,7 +100,8 @@
 
 <script>
     let allOrders = [];
-    const API_URL = "https://script.google.com/macros/s/AKfycbyadp1Xe1210jtZzOz4Gx-sEMCzTx6fM46gz2UIFTSNYGtxujAsirqW5VUNYlIbXIPy3Q/exec"; // <--- 請放入你的網址
+    // 已更新為您提供的新 API 網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbyadp1Xe1210jtZzOz4Gx-sEMCzTx6fM46gz2UIFTSNYGtxujAsirqW5VUNYlIbXIPy3Q/exec";
 
     async function searchOrder() {
         const name = document.getElementById("nameInput").value.trim();
@@ -111,6 +112,10 @@
         try {
             // 加入隨機參數防止快取
             const response = await fetch(`${API_URL}?name=${encodeURIComponent(name)}&v=${Date.now()}`);
+            
+            // 檢查回應狀態
+            if (!response.ok) throw new Error("Network response was not ok");
+            
             allOrders = await response.json();
             
             if(!allOrders || allOrders.length === 0) {
@@ -119,7 +124,8 @@
             }
             renderResults();
         } catch(e) {
-            resDiv.innerHTML = "<p style='text-align:center;color:red'>連線失敗</p>";
+            console.error("Fetch error:", e);
+            resDiv.innerHTML = "<p style='text-align:center;color:red'>❌ 連線失敗<br><small>請確認網路連線或 API 權限設定</small></p>";
         }
     }
 
@@ -151,10 +157,10 @@
             return `
                 <div class="order-card">
                     <div class="card-body">
-                        <img src="${item["圖片網址"] || 'https://placehold.co/100'}" class="product-img">
+                        <img src="${item["圖片網址"] || 'https://placehold.co/100'}" class="product-img" onerror="this.src='https://placehold.co/100?text=NO+IMG'">
                         <div style="flex:1">
-                            <div class="product-name">${item["商品名稱"]}</div>
-                            <span class="group-name">${item["團務名稱"]}</span>
+                            <div class="product-name">${item["商品名稱"] || '未知商品'}</div>
+                            <span class="group-name">${item["團務名稱"] || '一般團務'}</span>
                             <div class="meta-row">
                                 <span>數量: ${item["數量"] || 1}</span>
                                 <span class="amount">NT$ ${item["金額"] || 0}</span>
