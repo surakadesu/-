@@ -1,416 +1,456 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <!-- 關鍵設定：讓手機版寬度自動適應，徹底解決 iPhone 顯示與滑動問題 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🌜SURAKA🌛</title>
-    <style>
-        /* --- 基礎設定 (現代化配色系統) --- */
-        :root {
-            --primary-color: #4361ee; /* 主色調：現代藍 */
-            --primary-hover: #3a0ca3;
-            --bg-color: #f3f4f6;      /* 整體背景灰 */
-            --card-bg: #ffffff;       /* 卡片背景白 */
-            --text-main: #1f2937;     /* 主要文字深灰 */
-            --text-sub: #6b7280;      /* 次要文字淺灰 */
-            --border-color: #e5e7eb;
-            --success-color: #10b981; /* 成功綠 */
-            --warning-color: #f59e0b; /* 警告橘 */
-            --danger-color: #ef4444;  /* 危險紅 */
-            --gray-tag: #9ca3af;      /* 灰色標籤 */
-            --dark-tag: #374151;      /* 深灰色標籤 */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🌜SURAKA🌛</title>
+  <style>
+    /* --- 現代配色系統 (PANTONE Yellow 012 C & Black) --- */
+    :root {
+      --primary: #FFD700;       /* PANTONE Yellow 012 C */
+      --primary-dark: #E6C200;
+      --accent: #000000;        /* 黑色 */
+      --bg-gray: #f1f5f9;       /* 淺灰背景 */
+      --card-bg: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --border-color: #e2e8f0;
+      
+      /* 狀態顏色 */
+      --status-done: #0055ff;   /* 已完成/已收款 藍色 */
+      --status-process: #000000; /* 進行中 黑色 */
+      --status-wait: #94a3b8;    /* 等待中 灰色 */
+      --status-cod: #475569;     /* 貨到付款 深灰 */
+    }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* 移除手機點擊時的藍色高亮框 */
-        }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        body {
-            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh; /* 確保高度至少佔滿螢幕 */
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+      background-color: var(--bg-gray);
+      color: var(--text-main);
+      margin: 0;
+      padding: 16px;
+      line-height: 1.5;
+    }
 
-        /* --- 主容器 --- */
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
 
-        /* --- 標題區 --- */
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        
-        .header h2 {
-            font-weight: 700;
-            color: var(--text-main);
-            margin: 0;
-            font-size: 24px;
-            letter-spacing: 1px;
-        }
+    /* --- 標題區 --- */
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-top: 10px;
+    }
 
-        .header p {
-            color: var(--text-sub);
-            font-size: 14px;
-            margin-top: 6px;
-        }
+    .header h2 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: inline-block;
+      border-bottom: 4px solid var(--primary);
+    }
 
-        /* --- 搜尋控制面板 (卡片式設計) --- */
-        .search-panel {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px; /* 圓角 */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* 柔和陰影 */
-            margin-bottom: 24px;
-        }
+    .header p {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-top: 8px;
+    }
 
-        .form-group {
-            margin-bottom: 16px;
-        }
+    /* --- 搜尋面板 --- */
+    .search-panel {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+    }
 
-        /* 輸入框與選單樣式 */
-        .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 16px;
-            background-color: #f9fafb;
-            transition: all 0.3s ease; /* 平滑過渡效果 */
-            outline: none;
-            color: var(--text-main);
-            appearance: none; /* 移除瀏覽器預設樣式 */
-        }
+    .form-group {
+      margin-bottom: 12px;
+    }
 
-        /* 輸入框聚焦時的效果 */
-        .form-control:focus {
-            border-color: var(--primary-color);
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1); /* 光暈效果 */
-        }
+    .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 16px;
+      background-color: #ffffff;
+      transition: all 0.2s;
+      outline: none;
+      color: var(--text-main);
+      appearance: none;
+    }
 
-        /* 下拉選單的箭頭圖示 */
-        select.form-control {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.5rem center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-            padding-right: 2.5rem;
-        }
+    .form-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.4);
+    }
 
-        /* 按鈕樣式 */
-        .btn-search {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.1s;
-            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
-        }
+    select.form-control {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23000000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 12px center;
+      background-repeat: no-repeat;
+      background-size: 1.2em;
+      font-weight: 600;
+    }
 
-        .btn-search:hover {
-            background-color: var(--primary-hover);
-        }
+    .btn-search {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary);
+      color: var(--accent);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 0px 0px var(--primary-dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-        .btn-search:active {
-            transform: scale(0.98); /* 按下時稍微縮小 */
-        }
+    .btn-search:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0px 0px var(--primary-dark);
+    }
 
-        /* --- 結果列表 --- */
-        .result-area {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+    .btn-search:active {
+      transform: translateY(0);
+      box-shadow: 0 0px 0px 0px var(--primary-dark);
+    }
 
-        .empty-state {
-            text-align: center;
-            color: var(--text-sub);
-            padding: 40px 0;
-            font-size: 15px;
-        }
+    /* --- 結果列表 --- */
+    .result-area {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-        .loading {
-            text-align: center;
-            color: var(--primary-color);
-            font-weight: 500;
-            padding: 20px;
-        }
+    .empty-state {
+      text-align: center;
+      color: var(--text-sub);
+      padding: 40px 20px;
+      background: white;
+      border-radius: 20px;
+      border: 1px dashed var(--border-color);
+    }
 
-        /* --- 訂單卡片設計 --- */
-        .order-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-            overflow: hidden; /* 讓內部元素不超出圓角 */
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: transform 0.2s;
-        }
+    .loading {
+      text-align: center;
+      color: var(--accent);
+      font-weight: 700;
+      padding: 20px;
+    }
 
-        .order-card:hover {
-            transform: translateY(-2px); /* 滑鼠懸停時微微浮起 */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-        }
+    /* --- 訂單卡片 --- */
+    .order-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      animation: slideIn 0.3s ease-out;
+    }
 
-        .card-body {
-            padding: 16px;
-            display: flex;
-            gap: 16px;
-        }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        .product-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 10px;
-            object-fit: cover;
-            background-color: #e5e7eb; /* 圖片載入前的佔位色 */
-            flex-shrink: 0;
-        }
+    .card-body {
+      padding: 18px;
+      display: flex;
+      gap: 16px;
+    }
 
-        .info-col {
-            flex-grow: 1;
-            min-width: 0; /* 確保文字過長時能正確顯示 ... */
-        }
+    .product-img {
+      width: 85px;
+      height: 85px;
+      border-radius: 12px;
+      object-fit: cover;
+      background-color: #f1f5f9;
+      flex-shrink: 0;
+      border: 1px solid #eee;
+    }
 
-        .product-name {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 4px;
-            line-height: 1.4;
-        }
+    .info-col {
+      flex-grow: 1;
+      min-width: 0;
+    }
 
-        .group-name {
-            font-size: 13px;
-            color: var(--text-sub);
-            background: #f3f4f6;
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-bottom: 8px;
-        }
+    .product-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
 
-        .meta-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 15px;
-            color: var(--text-sub);
-            margin-top: 8px;
-        }
+    .group-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: var(--primary);
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
 
-        .amount-highlight {
-            color: var(--primary-color);
-            font-weight: 700;
-            font-size: 18px;
-        }
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+    }
 
-        /* --- 備註區塊 (您指定的樣式) --- */
-        .remarks-box {
-            background-color: #f8f9fa; /* 淺灰背景 */
-            border: 1px solid #e9ecef; /* 細邊框 */
-            color: #495057;            /* 深灰文字 */
-            padding: 12px;
-            margin: 0 16px 16px 16px;  /* 左右下留白 */
-            border-radius: 8px;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;     /* 保留換行 */
-            word-break: break-word;    /* 自動換行 */
-            text-align: left;
-        }
+    .qty-tag {
+      font-size: 13px;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
 
-        /* --- 狀態列 (您要求的等寬設計) --- */
-        .status-bar {
-            display: flex;
-            border-top: 1px solid var(--border-color);
-        }
+    .amount-highlight {
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 18px;
+    }
 
-        .status-item {
-            flex: 1;      /* 平分空間 */
-            width: 0;     /* 強制忽略內容寬度，達成嚴格等寬 */
-            min-width: 0;
-            text-align: center;
-            padding: 12px 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    </style>
+    /* --- 備註區 --- */
+    .remarks-box {
+      background-color: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+      color: var(--text-sub);
+      padding: 12px 18px;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .remarks-title {
+      font-weight: 800;
+      color: var(--accent);
+      margin-right: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    /* --- 狀態列 (嚴格等寬) --- */
+    .status-bar {
+      display: flex;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .status-item {
+      flex: 1;
+      width: 0;
+      text-align: center;
+      padding: 12px 6px;
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0.5px;
+    }
+
+    .status-item:first-child {
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 手機優化 */
+    @media (max-width: 400px) {
+      .product-img { width: 70px; height: 70px; }
+      .product-name { font-size: 15px; }
+      .amount-highlight { font-size: 16px; }
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h2>團務查詢</h2>
-        <p>輸入社群帳號查詢您的訂單進度</p>
-    </div>
+  <div class="header">
+    <h2>團務查詢系統</h2>
+    <p>＜ 團務訂單進度即時查詢 ＞</p>
+  </div>
 
-    <div class="search-panel">
-        <div class="form-group">
-            <select id="statusFilter" class="form-control" onchange="renderResults()">
-                <option value="all">📦 所有訂單</option>
-                <option value="pending">⏳ 未完成</option>
-                <option value="completed">✅ 已完成</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <input id="nameInput" type="text" class="form-control" 
-                   placeholder="請輸入您的社群帳號（噗浪請+@）"
-                   onkeypress="if(event.key === 'Enter') searchOrder()">
-        </div>
-        <button class="btn-search" onclick="searchOrder()">查詢訂單</button>
+  <div class="search-panel">
+    <div class="form-group">
+      <select id="statusFilter" class="form-control" onchange="renderResults()">
+        <option value="all">📦 所有訂單</option>
+        <option value="pending">⏳ 處理中</option>
+        <option value="completed">✅ 已完成</option>
+      </select>
     </div>
+    <div class="form-group">
+      <input id="nameInput" type="text" class="form-control" 
+             placeholder="請輸入您加入社群時提供的社群帳號（噗浪請+@）"
+             onkeypress="if(event.key === 'Enter') searchOrder()">
+    </div>
+    <button class="btn-search" onclick="searchOrder()">查詢</button>
+  </div>
 
-    <div id="result" class="result-area"></div>
+  <div id="result" class="result-area"></div>
 </div>
 
 <script>
-    let allOrders = [];
-    // ❗ 請確認這是您最新、可用的 Apps Script 網址
-    const API_URL = "https://script.google.com/macros/s/AKfycbyadp1Xe1210jtZzOz4Gx-sEMCzTx6fM46gz2UIFTSNYGtxujAsirqW5VUNYlIbXIPy3Q/exec";
+  let allOrders = [];
+  const API_URL = "https://script.google.com/macros/s/AKfycbyadp1Xe1210jtZzOz4Gx-sEMCzTx6fM46gz2UIFTSNYGtxujAsirqW5VUNYlIbXIPy3Q/exec";
 
-    function formatAmount(amount) {
-        const val = String(amount || '').trim();
-        if (!val || isNaN(parseFloat(val))) return "N/A";
-        try {
-            return new Intl.NumberFormat('zh-TW', {
-                style: 'currency', currency: 'TWD', minimumFractionDigits: 0
-            }).format(parseFloat(val));
-        } catch (e) { return "NT$" + val; }
+  // 格式化金額
+  function formatAmount(amount) {
+    const val = String(amount || '').trim();
+    if (!val || isNaN(parseFloat(val))) return "N/A";
+    return "$" + parseFloat(val).toLocaleString('zh-TW');
+  }
+
+  // 搜尋訂單 (強化邏輯)
+  async function searchOrder() {
+    const nameInput = document.getElementById("nameInput");
+    const resultDiv = document.getElementById("result");
+    const queryName = nameInput.value.trim().toLowerCase(); // 不分大小寫搜尋
+
+    if (!queryName) {
+      resultDiv.innerHTML = `<div class="empty-state">⚠️ 請輸入您的社群帳號</div>`;
+      return;
     }
 
-    async function searchOrder() {
-        const nameInput = document.getElementById("nameInput");
-        const resultDiv = document.getElementById("result");
-        const name = nameInput.value.trim();
+    resultDiv.innerHTML = `<div class="loading">搜尋中...</div>`;
 
-        if (!name) {
-            resultDiv.innerHTML = `<div class="empty-state">❗ 請輸入您的社群帳號</div>`;
-            return;
+    try {
+      // 增加 Cache Buster 避免瀏覽器抓到舊資料
+      const res = await fetch(`${API_URL}?name=${encodeURIComponent(queryName)}&t=${Date.now()}`);
+      const text = await res.text();
+      
+      try {
+        const rawData = JSON.parse(text);
+        
+        if (rawData.error) {
+          resultDiv.innerHTML = `<div class="empty-state">ERR: ${rawData.error}</div>`;
+          return;
         }
 
-        resultDiv.innerHTML = `<div class="loading">查詢中，請稍候...</div>`;
-
-        try {
-            const res = await fetch(API_URL + "?name=" + encodeURIComponent(name));
-            if (res.status === 403) throw new Error("存取被拒");
-            const text = await res.text();
-            
-            try {
-                allOrders = JSON.parse(text);
-                if (allOrders.error) {
-                    resultDiv.innerHTML = `<div class="empty-state" style="color:var(--danger-color)">伺服器錯誤: ${allOrders.error}</div>`;
-                    return;
-                }
-            } catch (e) {
-                resultDiv.innerHTML = `<div class="empty-state">資料解析錯誤</div>`;
-                return;
-            }
-
-            if (!allOrders || allOrders.length === 0) {
-                resultDiv.innerHTML = `<div class="empty-state">🔍 查無資料，請確認名稱是否正確</div>`;
-                return;
-            }
-
-            renderResults();
-
-        } catch (err) {
-            console.error(err);
-            resultDiv.innerHTML = `<div class="empty-state" style="color:var(--danger-color)">連線失敗，請檢查網路</div>`;
-        }
-    }
-
-    function renderResults() {
-        const filter = document.getElementById("statusFilter").value;
-        const resultDiv = document.getElementById("result");
-
-        if (allOrders.length === 0) return;
-
-        let filteredOrders = allOrders.filter(item => {
-            const isCompleted = String(item["出貨狀態"] || '').trim() === "已完成";
-            if (filter === "completed") return isCompleted;
-            if (filter === "pending") return !isCompleted;
-            return true;
+        // 強化篩選：確保回傳的資料名稱與輸入名稱是一致的，避免 Partial Match 誤判
+        // 假設後端已處理，前端再做一次保險過濾
+        allOrders = rawData.filter(item => {
+          const dbName = String(item["帳號名稱"] || item["社群帳號"] || '').trim().toLowerCase();
+          // 如果資料庫帳號包含輸入帳號，或是完全相等才顯示
+          return dbName === queryName || dbName === queryName.replace('@', '');
         });
 
-        if (filteredOrders.length === 0) {
-            resultDiv.innerHTML = `<div class="empty-state">此分類下無訂單資料</div>`;
-            return;
-        }
+      } catch (e) {
+        resultDiv.innerHTML = `<div class="empty-state">資料解析失敗，請稍後再試</div>`;
+        return;
+      }
 
-        let html = "";
-        filteredOrders.forEach(item => {
-            const product = item["商品名稱"] || "N/A";
-            const group = item["團務名稱"] || "N/A";
-            // 備註內容清理：移除前後空白
-            const remarks = String(item["備註"] || '').trim();
-            const amountFormatted = formatAmount(item["金額"]);
-            
-            // --- 狀態顏色邏輯 ---
-            const rawPaymentStatus = String(item["付款狀態"] || '未付款').trim();
-            // 藍色 / 灰色 / 灰色
-            const paymentColor = rawPaymentStatus.startsWith("已") ? "var(--primary-color)" : 
-                                 rawPaymentStatus.startsWith("未") ? "#a8a8a8" : "#6c757d";
-            
-            const rawShippingStatus = String(item["出貨狀態"] || '未完成').trim();
-            // 藍色 / 黑色 / 灰色
-            const shippingColor = rawShippingStatus.startsWith("已") ? "var(--primary-color)" : 
-                                  rawShippingStatus.startsWith("未") ? "#000000" : "#6c757d"; 
+      if (!allOrders || allOrders.length === 0) {
+        resultDiv.innerHTML = `<div class="empty-state">🔍 查無資料<br><small>請確認帳號是否輸入正確！</small></div>`;
+        return;
+      }
 
-            const img = item["圖片網址"] || "https://placehold.co/120x120/e5e7eb/a3a3a3?text=No+Img";
+      renderResults();
 
-            // 備註 HTML (如果有內容才顯示)
-            let remarksHtml = '';
-            if (remarks) {
-                remarksHtml = `<div class="remarks-box">${remarks}</div>`;
-            }
-
-            html += `
-                <div class="order-card">
-                    <div class="card-body">
-                        <img src="${img}" class="product-img" onerror="this.src='https://placehold.co/120x120/e5e7eb/a3a3a3?text=Err'">
-                        <div class="info-col">
-                            <div class="product-name">${product}</div>
-                            <div class="group-name">${group}</div>
-                            <div class="meta-row">
-                                <span>數量：${item["數量"] || 0}</span>
-                                <span class="amount-highlight">${amountFormatted}</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    ${remarksHtml}
-
-                    <div class="status-bar">
-                        <div class="status-item" style="background-color: ${paymentColor}" title="${rawPaymentStatus}">
-                            ${rawPaymentStatus}
-                        </div>
-                        <div class="status-item" style="background-color: ${shippingColor}" title="${rawShippingStatus}">
-                            ${rawShippingStatus}
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        resultDiv.innerHTML = html;
+    } catch (err) {
+      resultDiv.innerHTML = `<div class="empty-state">連線中斷，請檢查網路</div>`;
     }
+  }
+
+  // 渲染結果與顏色判斷
+  function renderResults() {
+    const filter = document.getElementById("statusFilter").value;
+    const resultDiv = document.getElementById("result");
+
+    if (allOrders.length === 0) return;
+
+    let filteredOrders = allOrders.filter(item => {
+      const shipStatus = String(item["出貨狀態"] || '').trim();
+      const isCompleted = (shipStatus === "已完成" || shipStatus === "已出貨");
+      if (filter === "completed") return isCompleted;
+      if (filter === "pending") return !isCompleted;
+      return true;
+    });
+
+    if (filteredOrders.length === 0) {
+      resultDiv.innerHTML = `<div class="empty-state">此分類下目前沒有訂單</div>`;
+      return;
+    }
+
+    let html = "";
+    filteredOrders.forEach(item => {
+      const product = item["商品名稱"] || "未知商品";
+      const group = item["團務名稱"] || "一般團務";
+      const remarks = String(item["備註"] || '').trim();
+      const amount = formatAmount(item["金額"]);
+      const qty = item["數量"] || 1;
+      const img = item["圖片網址"] || "https://placehold.co/200x200/f1f5f9/475569?text=SURAKA";
+
+      // --- 付款狀態顏色 ---
+      // 1. [已收訂金] [已收款] -> 藍色
+      // 2. [貨到付款] -> 深灰色
+      // 3. [未付款] -> 灰色
+      const pStatus = String(item["付款狀態"] || '').trim();
+      let pColor = "#94a3b8"; // 預設灰
+      if (pStatus.includes("已")) pColor = "#0055ff";
+      if (pStatus.includes("貨到付款")) pColor = "#475569";
+
+      // --- 出貨狀態顏色 ---
+      // 1. [已下訂] -> 黑色
+      // 2. [國際轉運中] -> 黑色 (或深藍)
+      // 3. [已出貨] [已完成] -> 藍色
+      const sStatus = String(item["出貨狀態"] || '').trim();
+      let sColor = "#000000"; // 預設黑
+      if (sStatus.includes("已完成") || sStatus.includes("已出貨")) sColor = "#0055ff";
+      if (sStatus === "" || sStatus.includes("待")) sColor = "#94a3b8";
+
+      let remarksHtml = remarks ? `<div class="remarks-box"><span class="remarks-title">NOTE:</span>${remarks}</div>` : '';
+
+      html += `
+        <div class="order-card">
+          <div class="card-body">
+            <img src="${img}" class="product-img" onerror="this.src='https://placehold.co/200x200/f1f5f9/475569?text=IMG+ERR'">
+            <div class="info-col">
+              <div class="product-name">${product}</div>
+              <div class="group-name">${group}</div>
+              <div class="meta-row">
+                <span class="qty-tag">QTY: ${qty}</span>
+                <span class="amount-highlight">${amount}</span>
+              </div>
+            </div>
+          </div>
+          
+          ${remarksHtml}
+
+          <div class="status-bar">
+            <div class="status-item" style="background-color: ${pColor}">
+              ${pStatus || '未付款'}
+            </div>
+            <div class="status-item" style="background-color: ${sColor}">
+              ${sStatus || '處理中'}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    resultDiv.innerHTML = html;
+  }
 </script>
 
 </body>
