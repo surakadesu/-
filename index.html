@@ -71,7 +71,8 @@
         .meta-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 14px; }
         .amount { font-weight: 900; font-size: 18px; }
 
-        .remarks-box { background: #f9f9f9; padding: 12px; margin: 0 20px 20px; border-radius: 10px; font-size: 13px; color: #666; }
+        .remarks-box { background: #f9f9f9; padding: 12px; margin: 0 20px 20px; border-radius: 10px; font-size: 13px; color: #666; white-space: pre-wrap;
+            word-break: break-word;}
 
         .status-bar { display: flex; border-top: 1px solid #f0f0f0; }
         .status-item { flex: 1; text-align: center; padding: 15px 5px; font-size: 13px; font-weight: 800; color: white; }
@@ -223,7 +224,7 @@
                             </div>
                         </div>
                     </div>
-                    ${item["備註"] ? `<div class="remarks-box">備註: ${item["備註"]}</div>` : ''}
+                    ${item["備註"] ? `<div class="remarks-box">${item["備註"]}</div>` : ''}
                     <div class="status-bar">
                         <div class="status-item" style="background:${pCol}">${pStatus}</div>
                         <div class="status-item" style="background:${sCol}">${sStatus}</div>
