@@ -5,417 +5,171 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🌜SURAKA🌛</title>
     <style>
-        /* --- 基礎設定 (PANTONE® Yellow 012 C 配色系統) --- */
         :root {
-            --brand-yellow: #FFD500; /* PANTONE Yellow 012 C */
+            --brand-yellow: #FFD500;
             --brand-black: #000000;
             --bg-color: #f8f9fa;
             --card-bg: #ffffff;
             --text-main: #000000;
             --text-sub: #4b5563;
             --border-color: #eeeeee;
-            
-            /* 狀態色 */
-            --status-blue: #0055ff;  /* 已完成/已收款 */
-            --status-gray: #a8a8a8;  /* 預設/未處理 */
-            --status-dark: #374151;  /* 貨到付款/中性 */
+            --status-blue: #0055ff;
+            --status-gray: #a8a8a8;
+            --status-dark: #374151;
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Noto Sans TC', sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
+            margin: 0; padding: 20px;
         }
 
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
+        .container { max-width: 500px; margin: 0 auto; }
 
-        /* --- 標題區 --- */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h2 { 
+            font-weight: 900; font-size: 28px; position: relative; z-index: 1; 
+            display: inline-block; padding: 0 10px;
         }
-        
-        .header h2 {
-            font-weight: 900;
-            color: var(--brand-black);
-            margin: 0;
-            font-size: 28px;
-            letter-spacing: 2px;
-            display: inline-block;
-            position: relative;
-            padding: 0 10px;
-        }
-
-        /* 標題裝飾線 */
         .header h2::after {
-            content: "";
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            width: 100%;
-            height: 12px;
-            background-color: var(--brand-yellow);
-            z-index: -1;
+            content: ""; position: absolute; bottom: 5px; left: 0;
+            width: 100%; height: 12px; background: var(--brand-yellow); z-index: -1;
         }
 
-        .header p {
-            color: var(--text-sub);
-            font-size: 14px;
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        /* --- 搜尋控制面板 --- */
         .search-panel {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
+            background: var(--card-bg); padding: 25px; border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); margin-bottom: 30px;
         }
 
         .form-control {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid var(--border-color);
-            border-radius: 15px;
-            font-size: 16px;
-            background-color: #ffffff;
-            transition: all 0.3s ease;
-            outline: none;
-            color: var(--brand-black);
-            appearance: none;
+            width: 100%; padding: 14px 18px; border: 2px solid var(--border-color);
+            border-radius: 15px; font-size: 16px; margin-bottom: 15px; outline: none;
         }
 
-        .form-control:focus {
-            border-color: var(--brand-yellow);
-            box-shadow: 0 0 0 4px rgba(255, 213, 0, 0.2);
-        }
-
-        select.form-control {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23000000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 1rem center;
-            background-repeat: no-repeat;
-            background-size: 1.2em 1.2em;
-        }
+        .form-control:focus { border-color: var(--brand-yellow); }
 
         .btn-search {
-            width: 100%;
-            padding: 16px;
-            background-color: var(--brand-yellow);
-            color: var(--brand-black);
-            border: none;
-            border-radius: 15px;
-            font-size: 17px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 6px 0px 0px #D4B100; /* 按鈕立體感 */
+            width: 100%; padding: 16px; background: var(--brand-yellow);
+            border: none; border-radius: 15px; font-size: 17px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 6px 0 #D4B100;
         }
 
-        .btn-search:active {
-            transform: translateY(3px);
-            box-shadow: 0 3px 0px 0px #D4B100;
-        }
+        .btn-search:active { transform: translateY(3px); box-shadow: 0 3px 0 #D4B100; }
 
-        /* --- 結果列表 --- */
-        .result-area {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: var(--text-sub);
-            padding: 50px 20px;
-            background: white;
-            border-radius: 24px;
-            font-size: 15px;
-            border: 1px dashed var(--border-color);
-        }
-
-        .loading {
-            text-align: center;
-            color: var(--brand-black);
-            font-weight: 700;
-            padding: 20px;
-        }
-
-        /* --- 訂單卡片 --- */
         .order-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
+            background: var(--card-bg); border-radius: 24px; margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); overflow: hidden; border: 1px solid var(--border-color);
         }
 
-        .card-body {
-            padding: 20px;
-            display: flex;
-            gap: 18px;
-        }
+        .card-body { padding: 20px; display: flex; gap: 15px; }
+        .product-img { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; background: #eee; }
+        .product-name { font-size: 17px; font-weight: 800; margin-bottom: 5px; }
+        .group-name { font-size: 12px; background: var(--brand-yellow); padding: 2px 8px; border-radius: 5px; font-weight: 700; }
 
-        .product-img {
-            width: 95px;
-            height: 95px;
-            border-radius: 16px;
-            object-fit: cover;
-            background-color: #f3f4f6;
-            flex-shrink: 0;
-            border: 1px solid #f0f0f0;
-        }
+        .meta-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 14px; }
+        .amount { font-weight: 900; font-size: 18px; }
 
-        .info-col {
-            flex-grow: 1;
-            min-width: 0;
-        }
+        .remarks-box { background: #f9f9f9; padding: 12px; margin: 0 20px 20px; border-radius: 10px; font-size: 13px; color: #666; }
 
-        .product-name {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--brand-black);
-            margin-bottom: 6px;
-            line-height: 1.3;
-        }
-
-        .group-name {
-            font-size: 12px;
-            color: var(--brand-black);
-            background: var(--brand-yellow);
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .meta-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            color: var(--text-sub);
-            margin-top: 5px;
-        }
-
-        .amount-highlight {
-            color: var(--brand-black);
-            font-weight: 900;
-            font-size: 19px;
-        }
-
-        .remarks-box {
-            background-color: #fafafa;
-            border: 1px solid #f0f0f0;
-            color: #555;
-            padding: 14px;
-            margin: 0 20px 20px 20px;
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        /* --- 狀態列 (等寬設計) --- */
-        .status-bar {
-            display: flex;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .status-item {
-            flex: 1;
-            width: 0;
-            text-align: center;
-            padding: 15px 10px;
-            font-size: 14px;
-            font-weight: 800;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .status-bar { display: flex; border-top: 1px solid #f0f0f0; }
+        .status-item { flex: 1; text-align: center; padding: 15px 5px; font-size: 13px; font-weight: 800; color: white; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h2>團務查詢系統</h2>
+        <h2> 團務查詢系統</h2>
         <p>🌜SURAKA🌛</p>
     </div>
 
     <div class="search-panel">
-        <div class="form-group">
-            <select id="statusFilter" class="form-control" onchange="renderResults()">
-                <option value="all">📦 所有訂單</option>
-                <option value="pending">⏳ 處理中</option>
-                <option value="completed">✅ 已完成</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <input id="nameInput" type="text" class="form-control" 
-                   placeholder="請輸入您入群時提供的社群帳號（噗浪請+@）"
-                   onkeypress="if(event.key === 'Enter') searchOrder()">
-        </div>
+        <select id="statusFilter" class="form-control" onchange="renderResults()">
+            <option value="all">📦 全部訂單</option>
+            <option value="pending">⏳ 處理中</option>
+            <option value="completed">✅ 已完成</option>
+        </select>
+        <input id="nameInput" type="text" class="form-control" placeholder="請輸入您的社群帳號（噗浪請+@）">
         <button class="btn-search" onclick="searchOrder()">查詢訂單</button>
     </div>
 
-    <div id="result" class="result-area"></div>
+    <div id="result"></div>
 </div>
 
 <script>
     let allOrders = [];
-    const API_URL = "https://script.google.com/macros/s/AKfycbyadp1Xe1210jtZzOz4Gx-sEMCzTx6fM46gz2UIFTSNYGtxujAsirqW5VUNYlIbXIPy3Q/exec";
-
-    function formatAmount(amount) {
-        const val = String(amount || '').trim();
-        if (!val || isNaN(parseFloat(val))) return "N/A";
-        try {
-            return "NT$ " + parseInt(val).toLocaleString();
-        } catch (e) { return "NT$" + val; }
-    }
+    const API_URL = "https://script.google.com/macros/s/AKfycbyadp1Xe1210jtZzOz4Gx-sEMCzTx6fM46gz2UIFTSNYGtxujAsirqW5VUNYlIbXIPy3Q/exec"; // <--- 請放入你的網址
 
     async function searchOrder() {
-        const nameInput = document.getElementById("nameInput");
-        const resultDiv = document.getElementById("result");
-        const name = nameInput.value.trim();
+        const name = document.getElementById("nameInput").value.trim();
+        const resDiv = document.getElementById("result");
+        if(!name) { resDiv.innerHTML = "<p style='text-align:center'>❗ 請輸入您的社群帳號</p>"; return; }
 
-        if (!name) {
-            resultDiv.innerHTML = `<div class="empty-state">❗ 請輸入您的社群帳號</div>`;
-            return;
-        }
-
-        resultDiv.innerHTML = `<div class="loading">查詢中，請稍候...</div>`;
-
+        resDiv.innerHTML = "<p style='text-align:center'>查詢中，請稍候...</p>";
         try {
-            const res = await fetch(`${API_URL}?name=${encodeURIComponent(name)}&t=${Date.now()}`);
-            if (res.status === 403) throw new Error("存取被拒");
-            const text = await res.text();
+            // 加入隨機參數防止快取
+            const response = await fetch(`${API_URL}?name=${encodeURIComponent(name)}&v=${Date.now()}`);
+            allOrders = await response.json();
             
-            try {
-                allOrders = JSON.parse(text);
-                if (allOrders.error) {
-                    resultDiv.innerHTML = `<div class="empty-state" style="color:#ef4444">伺服器錯誤: ${allOrders.error}</div>`;
-                    return;
-                }
-            } catch (e) {
-                resultDiv.innerHTML = `<div class="empty-state">資料解析錯誤</div>`;
+            if(!allOrders || allOrders.length === 0) {
+                resDiv.innerHTML = "<div class='order-card' style='padding:20px;text-align:center'>🔍 查無資料</div>";
                 return;
             }
-
-            if (!allOrders || allOrders.length === 0) {
-                resultDiv.innerHTML = `<div class="empty-state">🔍 查無資料，請確認名稱是否正確<br><small>(請檢查是否有漏掉 @ 符號)</small></div>`;
-                return;
-            }
-
             renderResults();
-
-        } catch (err) {
-            console.error(err);
-            resultDiv.innerHTML = `<div class="empty-state" style="color:#ef4444">連線失敗，請檢查網路狀態</div>`;
+        } catch(e) {
+            resDiv.innerHTML = "<p style='text-align:center;color:red'>連線失敗</p>";
         }
     }
 
     function renderResults() {
         const filter = document.getElementById("statusFilter").value;
-        const resultDiv = document.getElementById("result");
-
-        if (allOrders.length === 0) return;
-
-        let filteredOrders = allOrders.filter(item => {
-            const statusStr = String(item["出貨狀態"] || '').trim();
-            const isCompleted = statusStr === "已完成";
-            if (filter === "completed") return isCompleted;
-            if (filter === "pending") return !isCompleted;
+        const resDiv = document.getElementById("result");
+        
+        let filtered = allOrders.filter(item => {
+            const s = String(item["出貨狀態"] || item["狀態"] || "").trim();
+            if(filter === "completed") return (s === "已完成" || s === "已出貨");
+            if(filter === "pending") return (s !== "已完成" && s !== "已出貨");
             return true;
         });
 
-        if (filteredOrders.length === 0) {
-            resultDiv.innerHTML = `<div class="empty-state">此分類下目前沒有訂單</div>`;
-            return;
-        }
-
-        let html = "";
-        filteredOrders.forEach(item => {
-            const product = item["商品名稱"] || "SURAKA 精選商品";
-            const group = item["團務名稱"] || "SURAKA 團務";
-            const remarks = String(item["備註"] || '').trim();
-            const amountFormatted = formatAmount(item["金額"]);
+        resDiv.innerHTML = filtered.map(item => {
+            const pStatus = String(item["付款狀態"] || "未付款").trim();
+            const sStatus = String(item["出貨狀態"] || item["狀態"] || "處理中").trim();
             
-            // --- 付款狀態邏輯 ---
-            const rawP = String(item["付款狀態"] || '未付款').trim();
-            let pColor = "var(--status-gray)";
-            if (rawP.includes("已")) {
-                pColor = "var(--status-blue)";
-            } else if (rawP.includes("貨到付款")) {
-                pColor = "var(--status-dark)";
-            }
-            
-            // --- 出貨狀態邏輯 ---
-            const rawS = String(item["出貨狀態"] || '處理中').trim();
-            let sColor = "var(--status-gray)";
-            if (rawS.includes("已出貨") || rawS.includes("已完成")) {
-                sColor = "var(--status-blue)";
-            } else if (rawS.includes("已下訂") || rawS.includes("國際轉運中")) {
-                sColor = "var(--brand-black)";
-            }
+            // 付款顏色邏輯
+            let pCol = "var(--status-gray)";
+            if(pStatus.includes("已收") || pStatus.includes("已款")) pCol = "var(--status-blue)";
+            else if(pStatus.includes("貨到付款")) pCol = "var(--status-dark)";
 
-            const img = item["圖片網址"] || "https://placehold.co/200x200/f3f4f6/000000?text=SURAKA";
+            // 出貨顏色邏輯
+            let sCol = "var(--status-gray)";
+            if(sStatus.includes("已出貨") || sStatus.includes("已完成")) sCol = "var(--status-blue)";
+            else if(sStatus.includes("已下訂") || sStatus.includes("國際轉運中")) sCol = "var(--brand-black)";
 
-            let remarksHtml = '';
-            if (remarks) {
-                remarksHtml = `<div class="remarks-box">${remarks}</div>`;
-            }
-
-            html += `
+            return `
                 <div class="order-card">
                     <div class="card-body">
-                        <img src="${img}" class="product-img" onerror="this.src='https://placehold.co/200x200/f3f4f6/000000?text=IMG'">
-                        <div class="info-col">
-                            <div class="product-name">${product}</div>
-                            <div class="group-name">${group}</div>
+                        <img src="${item["圖片網址"] || 'https://placehold.co/100'}" class="product-img">
+                        <div style="flex:1">
+                            <div class="product-name">${item["商品名稱"]}</div>
+                            <span class="group-name">${item["團務名稱"]}</span>
                             <div class="meta-row">
-                                <span>數量：${item["數量"] || 1}</span>
-                                <span class="amount-highlight">${amountFormatted}</span>
+                                <span>數量: ${item["數量"] || 1}</span>
+                                <span class="amount">NT$ ${item["金額"] || 0}</span>
                             </div>
                         </div>
                     </div>
-                    
-                    ${remarksHtml}
-
+                    ${item["備註"] ? `<div class="remarks-box">備註: ${item["備註"]}</div>` : ''}
                     <div class="status-bar">
-                        <div class="status-item" style="background-color: ${pColor}">
-                            ${rawP}
-                        </div>
-                        <div class="status-item" style="background-color: ${sColor}">
-                            ${rawS}
-                        </div>
+                        <div class="status-item" style="background:${pCol}">${pStatus}</div>
+                        <div class="status-item" style="background:${sCol}">${sStatus}</div>
                     </div>
                 </div>
             `;
-        });
-
-        resultDiv.innerHTML = html;
+        }).join('');
     }
 </script>
-
 </body>
 </html>
