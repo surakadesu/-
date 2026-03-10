@@ -28,7 +28,7 @@
 
         .container { max-width: 500px; margin: 0 auto; }
 
-        .header { text-align: center; margin-bottom: 30px; }
+        .header { text-align: center; margin-bottom: 15px; }
         .header h2 { 
             font-weight: 900; font-size: 28px; position: relative; z-index: 1; 
             display: inline-block; padding: 0 10px;
@@ -96,7 +96,7 @@
             <option value="pending">⏳ 處理中</option>
             <option value="completed">✅ 已完成</option>
         </select>
-        <input id="nameInput" type="text" class="form-control" placeholder="請輸入您的社群帳號（噗浪請+@）">
+        <input id="nameInput" type="text" class="form-control" placeholder="請輸入您入群時填寫的社群帳號（噗浪請+@）">
         <button class="btn-search" id="searchBtn" onclick="searchOrder()">查詢訂單</button>
     </div>
 
@@ -120,7 +120,7 @@
             return; 
         }
 
-        resDiv.innerHTML = "<p style='text-align:center'>⏳ 正在連線雲端資料庫...</p>";
+        resDiv.innerHTML = "<p style='text-align:center'>⏳ 查詢中，請稍候...</p>";
         searchBtn.disabled = true;
 
         try {
