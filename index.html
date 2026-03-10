@@ -105,7 +105,8 @@
 
 <script>
     let allOrders = [];
-    // 請確保此網址為您的最新部署網址 (以 /exec 結尾)
+    
+    // 👇 請確認這裡填入的是「最新部署」的 API 網址
     const API_URL = "https://script.google.com/macros/s/AKfycbyadp1Xe1210jtZzOz4Gx-sEMCzTx6fM46gz2UIFTSNYGtxujAsirqW5VUNYlIbXIPy3Q/exec";
 
     async function searchOrder() {
@@ -126,8 +127,14 @@
             // 構建帶有隨機參數的 URL 防止快取
             const fetchUrl = `${API_URL}?name=${encodeURIComponent(name)}&v=${new Date().getTime()}`;
             
-            // 使用更寬鬆的連線方式處理 Google 重導向
-            const response = await fetch(fetchUrl);
+            // 💡 修正：加入 redirect: 'follow' 幫助處理 Google 的轉址機制
+            const response = await fetch(fetchUrl, {
+                method: 'GET',
+                redirect: 'follow',
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8",
+                }
+            });
             
             if (!response.ok) {
                 throw new Error(`連線回應不正常 (${response.status})`);
@@ -135,7 +142,7 @@
             
             const data = await response.json();
             
-            // 檢查 GAS 是否回傳了自定義錯誤
+            // 檢查 GAS 是否回傳了自定義錯誤 (例如試算表網址填錯)
             if (data && data.error) {
                 throw new Error(data.error);
             }
@@ -159,10 +166,10 @@
             resDiv.innerHTML = `
                 <div class="error-msg">
                     <strong>❌ 連線失敗</strong><br>
-                    錯誤訊息：${e.message === 'Failed to fetch' ? '網路請求遭攔截或 API 未正確部署' : e.message}<br><br>
+                    錯誤訊息：${e.message === 'Failed to fetch' ? '網路請求遭攔截，請確認GAS有發布「新版本」' : e.message}<br><br>
                     <small>排除方案：<br>
-                    1. 點擊 GAS 「部署」>「管理部署」，確認版本為「最新」<br>
-                    2. 確認「誰可以存取」設為「任何人」<br>
+                    1. 點擊 GAS 「部署」>「管理部署」> 右上角編輯 > 選擇「新版本」並重新部署<br>
+                    2. 確認 GAS 內的 SHEET_URL 試算表網址正確填寫<br>
                     3. 嘗試使用手機網路（排除特定 WiFi 阻擋）</small>
                 </div>
             `;
