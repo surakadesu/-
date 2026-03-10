@@ -259,7 +259,7 @@
 <div class="container">
     <div class="header">
         <h2>團務查詢系統</h2>
-        <p>ORDER PROGRESS TRACKING</p>
+        <p>🌜SURAKA🌛</p>
     </div>
 
     <div class="search-panel">
@@ -306,7 +306,7 @@
         resultDiv.innerHTML = `<div class="loading">查詢中，請稍候...</div>`;
 
         try {
-            const res = await fetch(API_URL + "?name=" + encodeURIComponent(name));
+            const res = await fetch(`${API_URL}?name=${encodeURIComponent(name)}&t=${Date.now()}`);
             if (res.status === 403) throw new Error("存取被拒");
             const text = await res.text();
             
