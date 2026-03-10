@@ -75,6 +75,11 @@
 
         .status-bar { display: flex; border-top: 1px solid #f0f0f0; }
         .status-item { flex: 1; text-align: center; padding: 15px 5px; font-size: 13px; font-weight: 800; color: white; }
+        
+        .error-msg {
+            background: #fff5f5; border: 1px solid #feb2b2; color: #c53030;
+            padding: 15px; border-radius: 15px; font-size: 14px; margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -92,7 +97,7 @@
             <option value="completed">✅ 已完成</option>
         </select>
         <input id="nameInput" type="text" class="form-control" placeholder="請輸入您的社群帳號（噗浪請+@）">
-        <button class="btn-search" onclick="searchOrder()">查詢訂單</button>
+        <button class="btn-search" id="searchBtn" onclick="searchOrder()">查詢訂單</button>
     </div>
 
     <div id="result"></div>
@@ -100,32 +105,64 @@
 
 <script>
     let allOrders = [];
-    // 已更新為您提供的新 API 網址
     const API_URL = "https://script.google.com/macros/s/AKfycbyadp1Xe1210jtZzOz4Gx-sEMCzTx6fM46gz2UIFTSNYGtxujAsirqW5VUNYlIbXIPy3Q/exec";
 
     async function searchOrder() {
-        const name = document.getElementById("nameInput").value.trim();
+        const nameInput = document.getElementById("nameInput");
+        const name = nameInput.value.trim();
         const resDiv = document.getElementById("result");
-        if(!name) { resDiv.innerHTML = "<p style='text-align:center'>❗ 請輸入您的社群帳號</p>"; return; }
+        const searchBtn = document.getElementById("searchBtn");
 
-        resDiv.innerHTML = "<p style='text-align:center'>查詢中，請稍候...</p>";
+        if(!name) { 
+            resDiv.innerHTML = "<p style='text-align:center'>❗ 請輸入您的社群帳號</p>"; 
+            return; 
+        }
+
+        resDiv.innerHTML = "<p style='text-align:center'>⏳ 正在連線雲端資料庫...</p>";
+        searchBtn.disabled = true;
+
         try {
-            // 加入隨機參數防止快取
-            const response = await fetch(`${API_URL}?name=${encodeURIComponent(name)}&v=${Date.now()}`);
+            // 使用更嚴謹的 fetch 設定
+            const fetchUrl = `${API_URL}?name=${encodeURIComponent(name)}&v=${Date.now()}`;
             
-            // 檢查回應狀態
-            if (!response.ok) throw new Error("Network response was not ok");
+            const response = await fetch(fetchUrl, {
+                method: 'GET',
+                mode: 'cors',
+                cache: 'no-cache',
+                redirect: 'follow'
+            });
             
-            allOrders = await response.json();
+            if (!response.ok) {
+                throw new Error(`伺服器回應錯誤 (${response.status})`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            allOrders = data;
             
             if(!allOrders || allOrders.length === 0) {
-                resDiv.innerHTML = "<div class='order-card' style='padding:20px;text-align:center'>🔍 查無資料</div>";
-                return;
+                resDiv.innerHTML = "<div class='order-card' style='padding:40px;text-align:center;color:var(--text-sub)'>🔍 查無「" + name + "」的資料<br><small style='display:block;margin-top:10px'>請確認名稱是否正確（噗浪請含 @）</small></div>";
+            } else {
+                renderResults();
             }
-            renderResults();
         } catch(e) {
-            console.error("Fetch error:", e);
-            resDiv.innerHTML = "<p style='text-align:center;color:red'>❌ 連線失敗<br><small>請確認網路連線或 API 權限設定</small></p>";
+            console.error("Query Error:", e);
+            resDiv.innerHTML = `
+                <div class="error-msg">
+                    <strong>❌ 連線失敗</strong><br>
+                    原因：${e.message === 'Failed to fetch' ? '網路被封鎖或 API 尚未正確部署' : e.message}<br><br>
+                    <small>排除建議：<br>
+                    1. 檢查 GAS 部署是否設為「任何人(Anyone)」<br>
+                    2. 若在公司/學校網路，請切換 4G 試試<br>
+                    3. 請確認 API 網址是否複製完整</small>
+                </div>
+            `;
+        } finally {
+            searchBtn.disabled = false;
         }
     }
 
@@ -140,16 +177,19 @@
             return true;
         });
 
+        if (filtered.length === 0) {
+            resDiv.innerHTML = "<p style='text-align:center;padding:20px;color:var(--text-sub)'>此分類下暫無訂單</p>";
+            return;
+        }
+
         resDiv.innerHTML = filtered.map(item => {
             const pStatus = String(item["付款狀態"] || "未付款").trim();
             const sStatus = String(item["出貨狀態"] || item["狀態"] || "處理中").trim();
             
-            // 付款顏色邏輯
             let pCol = "var(--status-gray)";
             if(pStatus.includes("已收") || pStatus.includes("已款")) pCol = "var(--status-blue)";
             else if(pStatus.includes("貨到付款")) pCol = "var(--status-dark)";
 
-            // 出貨顏色邏輯
             let sCol = "var(--status-gray)";
             if(sStatus.includes("已出貨") || sStatus.includes("已完成")) sCol = "var(--status-blue)";
             else if(sStatus.includes("已下訂") || sStatus.includes("國際轉運中")) sCol = "var(--brand-black)";
@@ -157,8 +197,8 @@
             return `
                 <div class="order-card">
                     <div class="card-body">
-                        <img src="${item["圖片網址"] || 'https://placehold.co/100'}" class="product-img" onerror="this.src='https://placehold.co/100?text=NO+IMG'">
-                        <div style="flex:1">
+                        <img src="${item["圖片網址"] || 'https://placehold.co/100?text=SURAKA'}" class="product-img" onerror="this.src='https://placehold.co/100?text=IMG'">
+                        <div style="flex:1; min-width:0;">
                             <div class="product-name">${item["商品名稱"] || '未知商品'}</div>
                             <span class="group-name">${item["團務名稱"] || '一般團務'}</span>
                             <div class="meta-row">
